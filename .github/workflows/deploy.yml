@@ -1,0 +1,30 @@
+name: Deploy to Docker Hub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PWD }}
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKER_LOGIN }}/mlops-lab5-actions:latest \
+            -t ${{ secrets.DOCKER_LOGIN }}/mlops-lab5-actions:${{ github.sha }} .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_LOGIN }}/mlops-lab5-actions:latest
+          docker push ${{ secrets.DOCKER_LOGIN }}/mlops-lab5-actions:${{ github.sha }}

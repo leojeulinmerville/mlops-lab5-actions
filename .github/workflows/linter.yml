@@ -26,6 +26,6 @@ jobs:
           .venv/bin/pip install -r requirements.txt
           .venv/bin/pip install flake8
 
-      - name: Run flake8
+      - name: Run flake8 (project files only)
         run: |
-          .venv/bin/flake8 .
+          .venv/bin/flake8 . --exclude=.venv
